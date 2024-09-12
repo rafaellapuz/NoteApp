@@ -101,24 +101,24 @@ app.post("/login", async (req, res) => {
 });
 
 //Get Users
-// app.get("/get-user",authenticateToken, async (req, res) => {
-//     const {user} = req.user;
+ app.get("/get-user",authenticateToken, async (req, res) => {
+     const {user} = req.user;
 
-//     const isUser = await User.findOne({_id: user._id});
+     const isUser = await User.findOne({_id: user._id});
     
-//     if (!isUser) {
-//         return res.status(400);
-//     }
-//     return res.json({
-//         user: {
-//             fullName: isUser.fullName,
-//             email: isUser.email,
-//             "_id": isUser._id, 
-//             createdOn: isUser.createdOn,
-//         },
-//         message: "",
-//     });
-//         });
+     if (!isUser) {
+         return res.status(400);
+     }
+     return res.json({
+        user: {
+             fullName: isUser.fullName,
+             email: isUser.email,
+             "_id": isUser._id, 
+             createdOn: isUser.createdOn,
+         },
+        message: "",
+     });
+         });
        
     
 //add notes
@@ -155,123 +155,123 @@ app.post("/add-note", authenticateToken, async (req, res) => {
 });
 
 //edit notes
-// app.put("/editnote/:noteId", authenticateToken, async (req, res) => {
-//     const noteId = req.params.noteId;
-//     const { title, content, tags, isPinned } = req.body;
-//     const {user} = req.user;
+ app.put("/editnote/:noteId", authenticateToken, async (req, res) => {
+     const noteId = req.params.noteId;
+     const { title, content, tags, isPinned } = req.body;
+     const {user} = req.user;
 
-//     if (!title && !content && tags) {
-//         return res.status(400).json({ error: true, message: "No edits provided"});
-//     } 
-//     try {
-//         const note = await Note.findOne({_id: noteId, userId: user._id });
-//         if (!note) {
-//             return res.status(404).json({ error: true, message: "Note not found"});
-//     }
-//     if (title) note.title = title;
-//     if (content) note.content = content;
-//     if (tags) note.tags = tags;
-//     if (isPinned) note.isPinned = isPinned;
+     if (!title && !content && tags) {
+         return res.status(400).json({ error: true, message: "No edits provided"});
+     } 
+     try {
+         const note = await Note.findOne({_id: noteId, userId: user._id });
+         if (!note) {
+             return res.status(404).json({ error: true, message: "Note not found"});
+     }
+     if (title) note.title = title;
+    if (content) note.content = content;
+    if (tags) note.tags = tags;
+     if (isPinned) note.isPinned = isPinned;
 
-//     await note.save();
-//     return res.json({
-//         error: false,
-//         note,
-//         message: "Note updated successfully",
-// });
-//     } catch (error) {
-//         return res.status(500).json({ error: true, message: "Internal Server Error"})
-//     }
-//     });
+     await note.save();
+     return res.json({
+         error: false,
+         note,
+         message: "Note updated successfully",
+ });
+     } catch (error) {
+         return res.status(500).json({ error: true, message: "Internal Server Error"})
+    }
+     });
 
 // get notes
-// app.get("/get-all-notes", authenticateToken, async (req, res) => {
-//     const { user } = req.user;
+ app.get("/get-all-notes", authenticateToken, async (req, res) => {
+     const { user } = req.user;
 
-//     try {
-//         const notes = await Note.find({ userId: user._id })
-//         .sort({ isPinned: -1
-// });
-// return res.json({
-//     error: false,
-//     notes,
-//     message: "Notes fetched successfully",});
-//     } catch (error) {
-//         return res.status(500).json({ error: true, message: "Failed to fetch notes"})
-//         }
-//         });
+     try {
+         const notes = await Note.find({ userId: user._id })
+         .sort({ isPinned: -1
+ });
+ return res.json({
+     error: false,
+     notes,
+     message: "Notes fetched successfully",});
+     } catch (error) {
+        return res.status(500).json({ error: true, message: "Failed to fetch notes"})
+         }
+         });
 
 // delete notes
-// app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
-//     const noteId = req.params.noteId;
-//     const { user } = req.user;
-//     try {
-//         const note = await Note.findOne({ _id: noteId, userId: user._id});
-//         if (!note) {
-//             return res.status(404).json({ error: true, message: "Note not found"});
-//             }
-//             await Note.deleteOne({_id: noteId, userId: user._id
-//             });
-//             return res.json({
-//                 error: false,
-//                 message: "Note deleted successfully",
-//                 });
-//                 } catch (error) {
-//         return res.status(500).json({ error: true, message: "Failed to delete note"});
-//         }
-// });
+ app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
+     const noteId = req.params.noteId;
+     const { user } = req.user;
+     try {
+         const note = await Note.findOne({ _id: noteId, userId: user._id});
+         if (!note) {
+             return res.status(404).json({ error: true, message: "Note not found"});
+             }
+             await Note.deleteOne({_id: noteId, userId: user._id
+             });
+            return res.json({
+                 error: false,
+                 message: "Note deleted successfully",
+                 });
+                 } catch (error) {
+         return res.status(500).json({ error: true, message: "Failed to delete note"});
+         }
+ });
 
 
 //Update pinned notes
-// app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) =>{
-//     const noteId = req.params.noteId;
-//     const { isPinned } = req.body;
-//     const { user } = req.user;
+ app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) =>{
+     const noteId = req.params.noteId;
+     const { isPinned } = req.body;
+     const { user } = req.user;
 
 
-//     try {
-//         const note = await Note.findOne({ _id: noteId, userId: user._id });;
-//         if (!note) {
-//             return res.status(404).json({ error: true, message: "Note not found"});
-//         }
-//         note.isPinned = isPinned || false;
-//         await note.save();
-//         return res.json({
-//             error: false,
-//             note,
-//             message: "Note updated successfully",
-//         })
-//         } catch (error) {
-//             return res.status(500).json({ error: true, message: "Failed to update pinned note"})
-//         }
-// })
+     try {
+         const note = await Note.findOne({ _id: noteId, userId: user._id });;
+         if (!note) {
+             return res.status(404).json({ error: true, message: "Note not found"});
+         }
+         note.isPinned = isPinned || false;
+         await note.save();
+         return res.json({
+             error: false,
+             note,
+             message: "Note updated successfully",
+         })
+         } catch (error) {
+             return res.status(500).json({ error: true, message: "Failed to update pinned note"})
+         }
+ })
 
 
 //search notes
-// app.get("/search-notes/", authenticateToken, async (req, res) =>{
-//     const {user } = req.user;
-//     const { query } = req.body;
-//     if (!query) {
-//         return res.status(400).json({ error: true, message: "Query is required"
-//     })
-// }try {
-//     const matchingNotes = await Note.find({
-//          userId: user._id,
-//         $or: [
-//             { title: { $regex: new RegExp(query, "i") } },
-//             { content: { $regex: new RegExp(query, "i") } },
-//         ],
-// });
-// return res.json({
-//     error: false,
-//     notes: matchingNotes,
-//     message: "Notes found successfully",})
+ app.get("/search-notes/", authenticateToken, async (req, res) =>{
+     const {user } = req.user;
+     const { query } = req.body;
+     if (!query) {
+         return res.status(400).json({ error: true, message: "Query is required"
+     })
+ }try {
+     const matchingNotes = await Note.find({
+          userId: user._id,
+         $or: [
+             { title: { $regex: new RegExp(query, "i") } },
+             { content: { $regex: new RegExp(query, "i") } },
+         ],
+ });
+ return res.json({
+     error: false,
+     notes: matchingNotes,
+     message: "Notes found successfully",})
 
-// } catch (error) {
-//     return res.status(500).json({ error: true, message: "Failed to search notes"
-// })
-// }
-// })
+ } catch (error) {
+     return res.status(500).json({ error: true, message: "Failed to search notes"
+ })
+ }
+ })
 
 app.listen(3000);
 
